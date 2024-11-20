@@ -1,63 +1,46 @@
 pipeline {
     agent any 
+
+    parameters {
+        choice(name: 'TRANSFORMATIONS', choices: ['remove_duplicates', 'remove_nulls', 'last_position'], description: 'Escolha as transformações')
+        string(name: 'NULL_COLUMNS', defaultValue: '', description: 'Colunas para remover nulos (separadas por vírgula)')
+        string(name: 'ORDER_BY', defaultValue: '', description: 'Coluna para ordenar (última posição)')
+        string(name: 'PARTITION_BY', defaultValue: '', description: 'Coluna para partição (última posição)')
+        string(name: 'FILE', defaultValue: '', description: 'Caminho do arquivo CSV a ser processado')
+    }
+
     stages {
-        stage('Clone') {
+        stage('Clonar Repositório') {
             steps {
-                git 'https://github.com/calel95/sistema_de_rifa.git'
+                // Clona o repositório Git
+                git 'https://github.com/calel95/jenkins_etl.git'
             }
         }
-        stage('Install Dependencies') {
-            steps {
-                sh 'pip install -r requirements.txt'
-            }
-        }
-        // stage('Create Item') {
-        //     steps {
-        //         script {
-        //             def response = httpRequest(
-        //                 url: 'http://localhost:8000/numeros/',
-        //                 httpMode: 'POST',
-        //                 contentType: 'APPLICATION_JSON',
-        //                 requestBody: '{"name": "Item1", "price": 100}'
-        //             )
-        //             echo "Response: ${response.content}"
-        //         }
-        //     }
-        // }
-        stage('Read Item') {
+        stage('Preparar Ambiente') {
             steps {
                 script {
-                    def response = httpRequest(
-                        url: 'http://localhost:8000/numeros/',
-                        httpMode: 'GET'
-                    )
-                    echo "Response: ${response.content}"
+                    // Instala dependências
+                    sh 'pip install -r requirements.txt'
                 }
             }
         }
-        stage('Update Item') {
+        stage('Executar ETL') {
             steps {
                 script {
-                    def response = httpRequest(
-                        url: 'http://localhost:8000/numeros/14',
-                        httpMode: 'PUT',
-                        contentType: 'APPLICATION_JSON',
-                        requestBody: '{"numero":14,"nome":"baba","created_at":"2024-11-08T00:03:12.024656Z","updated":true,"update_date":"2024-11-09T00:05:35.587714"}'
-                    )
-                    echo "Response: ${response.content}"
+                    // Executar os scripts Python na pasta jenkins
+                    sh "python extract.py ${params.FILE}"
+                    sh "python transform.py --transformations='${params.TRANSFORMATIONS}' --null_columns='${params.NULL_COLUMNS}' --order_by='${params.ORDER_BY}' --partition_by='${params.PARTITION_BY}'"
+                    sh 'python load.py'
                 }
             }
         }
-        stage('Delete Item') {
-            steps {
-                script {
-                    def response = httpRequest(
-                        url: 'http://localhost:8000/numeros/1',
-                        httpMode: 'DELETE'
-                    )
-                    echo "Response: ${response.content}"
-                }
-            }
+    }
+    post {
+        success {
+            echo 'ETL executado com sucesso!'
+        }
+        failure {
+            echo 'Falha na execução do ETL.'
         }
     }
 }
