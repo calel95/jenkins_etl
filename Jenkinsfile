@@ -13,7 +13,7 @@ pipeline {
         stage('Clonar Repositório') {
             steps {
                 // Clona o repositório Git
-                git clone 'https://github.com/calel95/jenkins_etl.git'
+                git url: 'https://github.com/calel95/jenkins_etl.git'
             }
         }
         stage('Preparar Ambiente') {
