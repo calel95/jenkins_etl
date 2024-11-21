@@ -13,30 +13,27 @@ pipeline {
         stage('Clonar Repositório') {
             steps {
                 // Clona o repositório Git
-                when{
-                    branch 'main'
-                }
                 git 'https://github.com/calel95/jenkins_etl.git'
             }
         }
-        stage('Preparar Ambiente') {
-            steps {
-                script {
-                    // Instala dependências
-                    sh 'pip install -r requirements.txt'
-                }
-            }
-        }
-        stage('Executar ETL') {
-            steps {
-                script {
-                    // Executar os scripts Python na pasta jenkins
-                    sh "python extract.py ${params.FILE}"
-                    sh "python transform.py --transformations='${params.TRANSFORMATIONS}' --null_columns='${params.NULL_COLUMNS}' --order_by='${params.ORDER_BY}' --partition_by='${params.PARTITION_BY}'"
-                    sh 'python load.py'
-                }
-            }
-        }
+        // stage('Preparar Ambiente') {
+        //     steps {
+        //         script {
+        //             // Instala dependências
+        //             sh 'pip install -r requirements.txt'
+        //         }
+        //     }
+        // }
+        // stage('Executar ETL') {
+        //     steps {
+        //         script {
+        //             // Executar os scripts Python na pasta jenkins
+        //             sh "python extract.py ${params.FILE}"
+        //             sh "python transform.py --transformations='${params.TRANSFORMATIONS}' --null_columns='${params.NULL_COLUMNS}' --order_by='${params.ORDER_BY}' --partition_by='${params.PARTITION_BY}'"
+        //             sh 'python load.py'
+        //         }
+        //     }
+        // }
     }
     post {
         success {
