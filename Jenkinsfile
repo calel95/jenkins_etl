@@ -10,10 +10,10 @@ pipeline {
     }
 
     stages {
-        stage('Iniciando') {
+        stage('Carregando arquivo') {
             steps {
                 // Clona o repositório Git
-                sh "echo  'iniciando processo, primeira eta'"
+                sh "echo  ${params.FILE}"
             }
         }
         stage('Preparar Ambiente') {
