@@ -17,14 +17,11 @@ pipeline {
                 script {
                     // Lê o conteúdo do arquivo CSV
                     def csvContent = readFile(file: params.FILE)
-                    def records = csvContent.split('\n').collect { line -> line.split(',') }
-                    
-                    // Exemplo de processamento dos dados
-                    records.each { record ->
-                        echo "Registro: ${record.join(', ')}"
+                    echo "Registro: ${csvContent}"
+                    // Exemplo de processamento dos dados                      
                     }
                 }
-            }
+            
         }
         stage('Preparar Ambiente') {
             steps {
