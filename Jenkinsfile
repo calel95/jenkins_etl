@@ -10,18 +10,18 @@ pipeline {
         stage('Executar ETL') {
             steps {
                 script {
-                    // Obtém o caminho completo do workspace
-                    def workspace = "${env.WORKSPACE}"
+                    // Verifica se o arquivo foi selecionado
+                    if (params.FILE) {
+                        // Obtém o caminho completo do arquivo
+                        def filePath = "${env.WORKSPACE}/${params.FILE.name}"
 
-                    // Obtém o nome do arquivo (pode ser personalizado)
-                    def fileName = params.FILE.name
-
-                    // Concatena o caminho do workspace com o nome do arquivo
-                    def filePath = "${workspace}/${fileName}"
-
-                    sh "python extract.py ${filePath}"
-                    sh "python transform.py --transformations='${params.TRANSFORMATIONS}' --null_columns='${params.NULL_COLUMNS}' --order_by='${params.ORDER_BY}' --partition_by='${params.PARTITION_BY}'"
-                    sh 'python load.py'
+                        // Executa os scripts Python
+                        sh "python extract.py ${filePath}"
+                        sh "python transform.py --transformations='${params.TRANSFORMATIONS}' --null_columns='${params.NULL_COLUMNS}' --order_by='${params.ORDER_BY}' --partition_by='${params.PARTITION_BY}'"
+                        sh 'python load.py'
+                    } else {
+                        echo 'Nenhum arquivo foi selecionado.'
+                    }
                 }
             }
         }
