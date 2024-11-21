@@ -12,8 +12,15 @@ pipeline {
     stages {
         stage('Carregando arquivo') {
             steps {
+                script {
+                    // Lê o arquivo CSV
+                    def csvFile = params.FILE
+                    //def records = readCSV(file: csvFile)                    
+                    // Processar os dados do CSV
+                    echo "Lendo dados do CSV: ${csvFile}"
+                }
                 // Clona o repositório Git
-                sh "echo  'iniciando processo, primeira eta'"
+                //sh "python extract.py ${params.FILE}"
             }
         }
         stage('Preparar Ambiente') {
@@ -28,7 +35,6 @@ pipeline {
             steps {
                 script {
                     // Executar os scripts Python na pasta jenkins
-                    sh "python extract.py ${params.FILE}"
                     sh "python transform.py --transformations='${params.TRANSFORMATIONS}' --null_columns='${params.NULL_COLUMNS}' --order_by='${params.ORDER_BY}' --partition_by='${params.PARTITION_BY}'"
                     sh 'python load.py'
                 }
