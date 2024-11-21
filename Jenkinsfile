@@ -13,13 +13,7 @@ pipeline {
         stage('Carregando arquivo') {
             steps {
                 // Clona o repositório Git
-                //sh "python extract.py ${params.FILE}"
-                script {
-                    // Lê o conteúdo do arquivo CSV
-                    def csvContent = readFile(file: params.FILE)
-                    echo "Registro: ${csvContent}"
-                    // Exemplo de processamento dos dados                      
-                    }
+                sh " ${params.FILE}"
                 }
             
         }
