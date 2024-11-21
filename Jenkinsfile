@@ -13,6 +13,9 @@ pipeline {
         stage('Clonar Repositório') {
             steps {
                 // Clona o repositório Git
+                when{
+                    branch 'main'
+                }
                 git 'https://github.com/calel95/jenkins_etl.git'
             }
         }
