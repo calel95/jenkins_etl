@@ -13,8 +13,8 @@ pipeline {
         stage('Processar Arquivo') {
             steps {
                 // Clona o repositório Git
-                copyArtifacts from: 'outroJob', filter: '${params.FILE}' into: 'arquivos'
-                sh "python extract.py ${params.FILE}"
+                sh 'echo ${params.FILE}'
+                //sh "python extract.py ${params.FILE}"
             }
         }
         stage('Preparar Ambiente') {
@@ -29,7 +29,7 @@ pipeline {
             steps {
                 script {
                     // Executar os scripts Python na pasta jenkins
-                    sh "python extract.py ${params.FILE}"
+                    
                     sh "python transform.py --transformations='${params.TRANSFORMATIONS}' --null_columns='${params.NULL_COLUMNS}' --order_by='${params.ORDER_BY}' --partition_by='${params.PARTITION_BY}'"
                     sh 'python load.py'
                 }
