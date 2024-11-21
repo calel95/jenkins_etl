@@ -10,11 +10,10 @@ pipeline {
     }
 
     stages {
-        stage('Processar Arquivo') {
+        stage('Iniciando') {
             steps {
                 // Clona o repositório Git
-                sh 'echo ${params.FILE}'
-                //sh "python extract.py ${params.FILE}"
+                sh "echo  'iniciando processo, primeira eta'"
             }
         }
         stage('Preparar Ambiente') {
@@ -29,7 +28,7 @@ pipeline {
             steps {
                 script {
                     // Executar os scripts Python na pasta jenkins
-                    
+                    sh "python extract.py ${params.FILE}"
                     sh "python transform.py --transformations='${params.TRANSFORMATIONS}' --null_columns='${params.NULL_COLUMNS}' --order_by='${params.ORDER_BY}' --partition_by='${params.PARTITION_BY}'"
                     sh 'python load.py'
                 }
