@@ -15,9 +15,9 @@ pipeline {
                 script {
                     // Lê o arquivo CSV
                     def csvFile = params.FILE
-                    //def records = readCSV(file: csvFile)                    
+                    def records = readCSV(file: csvFile)                    
                     // Processar os dados do CSV
-                    echo "Lendo dados do CSV: ${csvFile}"
+                    echo "Lendo dados do CSV: ${records}"
                 }
                 // Clona o repositório Git
                 //sh "python extract.py ${params.FILE}"
