@@ -13,7 +13,7 @@ pipeline {
         stage('Carregando arquivo') {
             steps {
                 // Clona o repositório Git
-                sh " echo ${params.FILE}"
+                sh " echo ${FILE}"
                 }           
         }
         stage('Preparar Ambiente') {
@@ -28,7 +28,7 @@ pipeline {
             steps {
                 script {
                     // Executar os scripts Python na pasta jenkins
-                    sh "python transform.py --transformations='${params.TRANSFORMATIONS}' --null_columns='${params.NULL_COLUMNS}' --order_by='${params.ORDER_BY}' --partition_by='${params.PARTITION_BY}'"
+                    sh "python transform.py --transformations='${TRANSFORMATIONS}' --null_columns='${NULL_COLUMNS}' --order_by='${ORDER_BY}' --partition_by='${PARTITION_BY}'"
                     sh 'python load.py'
                 }
             }
