@@ -13,8 +13,7 @@ pipeline {
         stage('Carregando arquivo') {
             steps {
                 // Clona o repositório Git
-
-                sh "echo  '${params.FILE}"
+                sh "echo  'iniciando processo, primeira eta'"
             }
         }
         stage('Preparar Ambiente') {
