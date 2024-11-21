@@ -6,22 +6,20 @@ pipeline {
         string(name: 'NULL_COLUMNS', defaultValue: '', description: 'Colunas para remover nulos (separadas por vírgula)')
         string(name: 'ORDER_BY', defaultValue: '', description: 'Coluna para ordenar (última posição)')
         string(name: 'PARTITION_BY', defaultValue: '', description: 'Coluna para partição (última posição)')
-        //file(name: 'FILE', description: 'Caminho do arquivo CSV a ser processado')
-        base64File  'small'
-        stashedFile 'large'
+        file(name: 'FILE', description: 'Caminho do arquivo CSV a ser processado')
     }
 
     stages {
         stage('Carregando arquivo') {
             steps {
                 // Clona o repositório Git
-                withFileParameter('small') {
-                sh 'cat $small'
-                }
-                unstash 'large'
-                sh 'cat large'
+                withFileParameter('FILE') {
+          sh 'cat $FILE'
+        }
+        
+      }
+                sh "echo  ${params.FILE}"
             
-            }
         }
         stage('Preparar Ambiente') {
             steps {
