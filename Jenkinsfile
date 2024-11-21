@@ -12,9 +12,15 @@ pipeline {
     stages {
         stage('Carregando arquivo') {
             steps {
-                // Clona o repositório Git
-                sh " echo ${params.FILE}"
-                }           
+                script {
+                    // Imprime o nome do arquivo carregado
+                    echo "Arquivo carregado: ${params.FILE}"
+                    
+                    // Salva o arquivo em um local acessível
+                    def filePath = "${env.WORKSPACE}/${params.FILE.getName()}"
+                    sh "mv ${params.FILE} ${filePath}"
+                }
+            }           
         }
         stage('Preparar Ambiente') {
             steps {
