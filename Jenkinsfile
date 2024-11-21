@@ -13,13 +13,9 @@ pipeline {
         stage('Carregando arquivo') {
             steps {
                 // Clona o repositório Git
-                withFileParameter('FILE') {
-          sh 'cat $FILE'
-        }
-        
-      }
-                sh "echo  ${params.FILE}"
-            
+
+                sh "echo  '${params.FILE}"
+            }
         }
         stage('Preparar Ambiente') {
             steps {
