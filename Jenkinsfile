@@ -12,15 +12,18 @@ pipeline {
     stages {
         stage('Carregando arquivo') {
             steps {
-                script {
-                    // Lê o arquivo CSV
-                    def csvFile = params.FILE
-                    def records = readCSV(file: csvFile)                    
-                    // Processar os dados do CSV
-                    echo "Lendo dados do CSV: ${records}"
-                }
                 // Clona o repositório Git
                 //sh "python extract.py ${params.FILE}"
+                script {
+                    // Lê o conteúdo do arquivo CSV
+                    def csvContent = readFile(file: params.FILE)
+                    def records = csvContent.split('\n').collect { line -> line.split(',') }
+                    
+                    // Exemplo de processamento dos dados
+                    records.each { record ->
+                        echo "Registro: ${record.join(', ')}"
+                    }
+                }
             }
         }
         stage('Preparar Ambiente') {
