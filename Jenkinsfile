@@ -6,7 +6,7 @@ pipeline {
         string(name: 'NULL_COLUMNS', defaultValue: '', description: 'Colunas para remover nulos (separadas por vírgula)')
         string(name: 'ORDER_BY', defaultValue: '', description: 'Coluna para ordenar (última posição)')
         string(name: 'PARTITION_BY', defaultValue: '', description: 'Coluna para partição (última posição)')
-        string(name: 'FILE', defaultValue: '', description: 'Caminho do arquivo CSV a ser processado')
+        file(name: 'FILE', description: 'Caminho do arquivo CSV a ser processado')
     }
 
     stages {
