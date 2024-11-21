@@ -13,12 +13,16 @@ pipeline {
         stage('Carregando arquivo') {
             steps {
                 script {
-                    // Imprime o nome do arquivo carregado
-                    echo "Arquivo carregado: ${params.FILE}"
-                    
-                    // Salva o arquivo em um local acessível
-                    def filePath = "${env.WORKSPACE}/${params.FILE.getName()}"
-                    sh "mv ${params.FILE} ${filePath}"
+                    // Verifica se o arquivo foi carregado
+                    if (params.FILE) {
+                        echo "Arquivo carregado: ${params.FILE.getName()}"
+                        
+                        // Move o arquivo para um local acessível
+                        def filePath = "${env.WORKSPACE}/${params.FILE.getName()}"
+                        sh "mv ${params.FILE} ${filePath}"
+                    } else {
+                        error "Nenhum arquivo foi carregado."
+                    }
                 }
             }           
         }
