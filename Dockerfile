@@ -5,19 +5,24 @@ FROM jenkins/jenkins:lts
 # Definir o diretório de trabalho no container
 WORKDIR /app
 
-# Use o usuário root para instalar pacotes
+# Use o usuário root para instalar pacotes e configurar permissões
 USER root
-
-# Atualizar os pacotes e instalar o Python3 e o pip
 RUN apt-get update && \
-    apt-get install -y python3 python3-pip && \
+    apt-get install -y python3 python3-pip python3-venv && \
     rm -rf /var/lib/apt/lists/*
+
+# Create a virtual environment
+RUN python3 -m venv venv
+
+# Activate the virtual environment
+ENV VIRTUAL_ENV=/app/venv
+ENV PATH="/app/venv/bin:$PATH"
 
 # Copiar o arquivo de requisitos
 COPY requirements.txt /app/requirements.txt
 
-# Instalar as dependências do Python
-RUN pip3 install -r requirements.txt
+# Instalar as dependências do Python dentro do ambiente virtual
+RUN /app/venv/bin/pip install -r requirements.txt
 
 # Retornar ao usuário Jenkins
 USER jenkins
