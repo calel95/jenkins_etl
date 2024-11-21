@@ -1,30 +1,20 @@
 pipeline {
     agent any 
 
-    parameters {
-        choice(name: 'TRANSFORMATIONS', choices: ['remove_duplicates', 'remove_nulls', 'last_position'], description: 'Escolha as transformações')
-        string(name: 'NULL_COLUMNS', defaultValue: '', description: 'Colunas para remover nulos (separadas por vírgula)')
-        string(name: 'ORDER_BY', defaultValue: '', description: 'Coluna para ordenar (última posição)')
-        string(name: 'PARTITION_BY', defaultValue: '', description: 'Coluna para partição (última posição)')
-        file(name: 'FILE', description: 'Caminho do arquivo CSV a ser processado')
-    }
+    // parameters {
+    //     choice(name: 'TRANSFORMATIONS', choices: ['remove_duplicates', 'remove_nulls', 'last_position'], description: 'Escolha as transformações')
+    //     string(name: 'NULL_COLUMNS', defaultValue: '', description: 'Colunas para remover nulos (separadas por vírgula)')
+    //     string(name: 'ORDER_BY', defaultValue: '', description: 'Coluna para ordenar (última posição)')
+    //     string(name: 'PARTITION_BY', defaultValue: '', description: 'Coluna para partição (última posição)')
+    //     file(name: 'FILE', description: 'Caminho do arquivo CSV a ser processado')
+    // }
 
     stages {
         stage('Carregando arquivo') {
             steps {
-                script {
-                    // Verifica se o arquivo foi carregado
-                    if (params.FILE) {
-                        echo "Arquivo carregado: ${params.FILE.getName()}"
-                        
-                        // Move o arquivo para um local acessível
-                        def filePath = "${env.WORKSPACE}/${params.FILE.getName()}"
-                        sh "mv ${params.FILE} ${filePath}"
-                    } else {
-                        error "Nenhum arquivo foi carregado."
-                    }
-                }
-            }           
+                // Clona o repositório Git
+                sh " echo ${params.FILE}"
+                }           
         }
         stage('Preparar Ambiente') {
             steps {
