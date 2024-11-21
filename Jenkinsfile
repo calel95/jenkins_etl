@@ -6,15 +6,14 @@ pipeline {
         string(name: 'NULL_COLUMNS', defaultValue: '', description: 'Colunas para remover nulos (separadas por vírgula)')
         string(name: 'ORDER_BY', defaultValue: '', description: 'Coluna para ordenar (última posição)')
         string(name: 'PARTITION_BY', defaultValue: '', description: 'Coluna para partição (última posição)')
-        file(name: 'FILE', defaultValue: '', description: 'Caminho do arquivo CSV a ser processado')
-    }
+        string(name: 'FILE', defaultValue: '', description: 'Caminho do arquivo CSV a ser processado')
     }
 
     stages {
         stage('Iniciando') {
             steps {
                 // Clona o repositório Git
-                sh "echo  'iniciando processo, primeira etapa'"
+                sh "echo  'iniciando processo, primeira eta'"
             }
         }
         stage('Preparar Ambiente') {
