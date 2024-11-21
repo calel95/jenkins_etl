@@ -2,28 +2,46 @@ pipeline {
     agent any 
 
     parameters {
-        // ... outros parâmetros ...
-        file(name: 'FILE', description: 'Selecione o arquivo CSV')
+        choice(name: 'TRANSFORMATIONS', choices: ['remove_duplicates', 'remove_nulls', 'last_position'], description: 'Escolha as transformações')
+        string(name: 'NULL_COLUMNS', defaultValue: '', description: 'Colunas para remover nulos (separadas por vírgula)')
+        string(name: 'ORDER_BY', defaultValue: '', description: 'Coluna para ordenar (última posição)')
+        string(name: 'PARTITION_BY', defaultValue: '', description: 'Coluna para partição (última posição)')
+        file(name: 'FILE', description: 'Caminho do arquivo CSV a ser processado')
     }
 
     stages {
+        stage('Processar Arquivo') {
+            steps {
+                // Clona o repositório Git
+                copyArtifacts from: 'outroJob', filter: '${params.FILE}' into: 'arquivos'
+                sh "python extract.py ${params.FILE}"
+            }
+        }
+        stage('Preparar Ambiente') {
+            steps {
+                script {
+                    // Instala dependências
+                    sh 'pip install -r requirements.txt'
+                }
+            }
+        }
         stage('Executar ETL') {
             steps {
                 script {
-                    // Verifica se o arquivo foi selecionado
-                    if (params.FILE) {
-                        // Obtém o caminho completo do arquivo
-                        def filePath = "${env.WORKSPACE}/${params.FILE.name}"
-
-                        // Executa os scripts Python
-                        sh "python extract.py ${filePath}"
-                        sh "python transform.py --transformations='${params.TRANSFORMATIONS}' --null_columns='${params.NULL_COLUMNS}' --order_by='${params.ORDER_BY}' --partition_by='${params.PARTITION_BY}'"
-                        sh 'python load.py'
-                    } else {
-                        echo 'Nenhum arquivo foi selecionado.'
-                    }
+                    // Executar os scripts Python na pasta jenkins
+                    sh "python extract.py ${params.FILE}"
+                    sh "python transform.py --transformations='${params.TRANSFORMATIONS}' --null_columns='${params.NULL_COLUMNS}' --order_by='${params.ORDER_BY}' --partition_by='${params.PARTITION_BY}'"
+                    sh 'python load.py'
                 }
             }
+        }
+    }
+    post {
+        success {
+            echo 'ETL executado com sucesso!'
+        }
+        failure {
+            echo 'Falha na execução do ETL.'
         }
     }
 }
