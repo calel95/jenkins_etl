@@ -20,7 +20,7 @@ pipeline {
                 }
                 unstash 'large'
                 sh 'cat large'
-            }
+            
             }
         }
         stage('Preparar Ambiente') {
