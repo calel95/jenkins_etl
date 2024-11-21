@@ -18,10 +18,8 @@ pipeline {
         }
         stage('Preparar Ambiente') {
             steps {
-                script {
                     // Instala dependências
                     sh 'pip install -r requirements.txt'
-                }
             }
         }
         stage('Executar ETL') {
