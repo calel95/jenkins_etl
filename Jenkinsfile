@@ -37,6 +37,16 @@ pipeline {
                 }
             }
         }
+        stage('teste stage') {
+            steps {
+                script {
+                    // Mover ou copiar o arquivo para a pasta workspace
+                    withFileParameter('UPLOAD_FILE') {
+                    sh 'cat $UPLOAD_FILE'
+                    }
+                }
+            }
+        }
         stage('Preparar Ambiente') {
             steps {
                     // Instala dependências
@@ -49,16 +59,6 @@ pipeline {
             steps {
                 script {
                 sh 'ls -lh ${WORKSPACE}'
-                }
-            }
-        }
-        stage('teste stage') {
-            steps {
-                script {
-                    // Mover ou copiar o arquivo para a pasta workspace
-                    withFileParameter('UPLOAD_FILE') {
-                    sh 'cat $UPLOAD_FILE'
-                    }
                 }
             }
         }
