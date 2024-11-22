@@ -32,20 +32,21 @@ pipeline {
             description: 'Parâmetros adicionais para transformações (JSON format ex: {"null_columns": ["col1", "col2"]})'
         )
     }
-
     stages {
-        stage('Preparar Ambiente') {
-            steps {
-                    // Instala dependências
-                    sh 'pip install -r requirements.txt'
-            }
-        }
         stage('Exibir parâmetros') {
             steps {
                 script {
                     echo "Removido dados duplicados: ${params.remove_duplicates}"
                     echo "Removido dados nulos: ${params.remove_nulls}"
                 }
+            }
+        }
+        stage('Preparar Ambiente') {
+            steps {
+                    // Instala dependências
+                    script {
+                    sh 'pip install -r requirements.txt'
+                    }
             }
         }
         stage('Extract') {
@@ -57,15 +58,9 @@ pipeline {
 from extract import Extract
 extractor = Extract()
 df = extractor.web_one_input_${params.FILE_TYPE}('data/${params.FILE_TYPE}/${params.FILE_NAME}.${params.FILE_TYPE}')
-"
+df.to_parquet('data/tmp/etl_stage.parquet')"
                     """
                 }
-            }
-        }
-        stage('Preparar Ambiente') {
-            steps {
-                    // Instala dependências
-                    sh 'pip install -r requirements.txt'
             }
         }
         stage('Executar ETL') {
