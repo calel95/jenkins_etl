@@ -7,10 +7,8 @@ pipeline {
             choices: ['csv', 'json'],
             description: 'Escolha o tipo de arquivo para carregar'
         )
-        string(
-            name: 'FILE_NAME',
-            defaultValue: 'example',
-            description: 'Digite o nome do arquivo (sem extensão)'
+        readFile(
+            name: 'FILE_NAME'
         )
         choice(
             name: 'TRANSFORMATIONS',
