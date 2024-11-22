@@ -45,8 +45,22 @@ pipeline {
         stage('Carregando arquivo') {
             steps {
                 // Clona o repositório Git
-                sh " echo ${FILE}.${params.FILE_TYPE}"
+                sh " echo ${FILE}"
                 }           
+        }
+        stage('Extract') {
+            steps {
+                script {
+                    echo "Carregando arquivo: ${FILE}"
+                    sh """
+                    python -c "
+from extract import Extract
+extractor = Extract()
+df = extractor.web_one_input_${params.FILE_TYPE}('data/${params.FILE_TYPE}/${params.FILE_NAME}.${params.FILE_TYPE}')
+df.to_parquet('data/tmp/etl_stage.parquet')"
+                    """
+                }
+            }
         }
         stage('Preparar Ambiente') {
             steps {
