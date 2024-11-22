@@ -36,12 +36,12 @@ class Extract:
     #     return self.df
 
 
-    def web_one_input_csv(self, file, save_path='data/tmp/etl_stage.parquet'):
+    def web_one_input_csv(self, file):
         """Carrega dados de um arquivo CSV em memória e salva em disco."""
         try:
             self.df = duckdb.read_csv(file)  # Carrega o CSV
-            self.df.to_parquet(save_path)   # Salva o DataFrame em formato Parquet
-            print(f"Arquivo salvo em {save_path}")
+            #self.df.to_parquet(save_path)   # Salva o DataFrame em formato Parquet
+            print(f"Arquivo salvo {file}")
             return self.df
         except Exception as e:
             print(f"Erro ao carregar o arquivo CSV: {e}")
