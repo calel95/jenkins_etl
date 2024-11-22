@@ -6,7 +6,7 @@ pipeline {
             choices: ['csv', 'json'],
             description: 'Escolha o tipo de arquivo para carregar'
         )
-        file(
+        base64File(
             name: 'UPLOAD_FILE',
             description: 'Faça o upload do arquivo CSV ou JSON'
         )
@@ -25,7 +25,6 @@ pipeline {
             defaultValue: '',
             description: 'Parâmetros adicionais para transformações (JSON format ex: {"null_columns": ["col1", "col2"]})'
         )
-        base64File 'file_teste'
     }
     stages {
         stage('Exibir parâmetros') {
@@ -35,7 +34,6 @@ pipeline {
                     echo "Removido dados nulos: ${params.remove_nulls}"
                     echo "Nome do arquivo carregado: ${UPLOAD_FILE}"
                     echo "Caminho completo do arquivo: ${WORKSPACE}/${UPLOAD_FILE}"
-                    echo "Caminho completo do arquivo: ${WORKSPACE}/${file_teste}"
                 }
             }
         }
@@ -59,8 +57,8 @@ pipeline {
             steps {
                 script {
                     // Mover ou copiar o arquivo para a pasta workspace
-                    withFileParameter('file_teste') {
-                    sh 'cat $file_teste'
+                    withFileParameter('UPLOAD_FILE') {
+                    sh 'cat $UPLOAD_FILE'
                     }
                 }
             }
