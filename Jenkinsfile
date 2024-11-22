@@ -57,8 +57,8 @@ pipeline {
                     python -c "
 from extract import Extract
 extractor = Extract()
-df = extractor.web_one_input_${params.FILE_TYPE}('data/${params.FILE_TYPE}/${params.FILE_NAME}.${params.FILE_TYPE}')
-df.to_parquet('data/tmp/etl_stage.parquet')"
+df = extractor.web_one_input_${params.FILE_TYPE}('data/${params.FILE_TYPE}/${params.FILE}.${params.FILE_TYPE}')
+"
                     """
                 }
             }
