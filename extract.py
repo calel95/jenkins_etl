@@ -1,63 +1,55 @@
 import duckdb 
 import os
 import pandas as pd
+import logging
 
 class Extract:
     def __init__(self) -> None:
-        #self.file_path = file_path
         self.df = None
-        os.chdir('..')
-
-    # def one_input_json(self, arquive_name: str):
-    #     '''apenas o nome do arquivo json'''
-    #     #os.chdir('..')
-    #     file_path = f"data/json/{arquive_name}.json"
-    #     self.df = duckdb.read_json(f"data/json/{arquive_name}.json")
-    #     size = os.path.getsize(file_path)
-    #     print(f"Size do arquivo '{arquive_name}': {size} bytes")
-    #     return self.df
-    
-    # def one_input_csv(self, arquive_name: str):
-    #     '''apenas o nome do arquivo csv'''
-    #     os.chdir('..')
-    #     #file_path = f"data/csv/{arquive_name}.csv"
-    #     file_path = f"data/csv/{arquive_name}.csv"
-    #     self.df = duckdb.read_csv(f"data/csv/{arquive_name}.csv")
-    #     size = os.path.getsize(file_path)
-    #     print(f"Size do arquivo '{arquive_name}': {size} bytes")
-    #     return self.df
-    
-    # def all_input_csv(self):
-    #     self.df = duckdb.read_csv("data/csv/*.csv")
-    #     return self.df
-    
-    # def all_input_json(self):
-    #     self.df = duckdb.read_json("data/json/*.json")
-    #     return self.df
-
+        # Configurar logging
+        logging.basicConfig(level=logging.INFO)
+        self.logger = logging.getLogger(__name__)
 
     def web_one_input_csv(self, file):
-        """Carrega dados de um arquivo CSV em memória e salva em disco."""
-        if not os.path.exists(file):
-            raise FileNotFoundError(f"O arquivo {file} não foi encontrado.")
+        """Carrega dados de um arquivo CSV em memória."""
         try:
-            self.df = duckdb.read_csv(file)  # Carrega o CSV
-            #self.df.to_parquet(save_path)   # Salva o DataFrame em formato Parquet
-            print(f"Arquivo salvo {file}")
+            self.logger.info(f"Tentando carregar arquivo CSV: {file}")
+            
+            # Verificar se o arquivo existe
+            if not os.path.exists(file):
+                raise FileNotFoundError(f"O arquivo {file} não foi encontrado.")
+            
+            # Verificar se o arquivo está vazio
+            if os.path.getsize(file) == 0:
+                raise ValueError(f"O arquivo {file} está vazio.")
+            
+            # Tentar ler o arquivo
+            self.df = duckdb.read_csv(file)
+            self.logger.info(f"Arquivo CSV carregado com sucesso: {file}")
             return self.df
+            
         except Exception as e:
-            print(f"Erro ao carregar o arquivo CSV: {e}")
+            self.logger.error(f"Erro ao carregar o arquivo CSV {file}: {str(e)}")
             raise
 
-    def web_one_input_json(self, file, save_path='data/tmp/etl_stage.parquet'):
-        """Carrega dados de um arquivo JSON em memória e salva em disco."""
-        if not os.path.exists(file):
-            raise FileNotFoundError(f"O arquivo {file} não foi encontrado.")
+    def web_one_input_json(self, file):
+        """Carrega dados de um arquivo JSON em memória."""
         try:
-            self.df = duckdb.read_csv(file)  # Substitua por read_json se suportar JSON diretamente
-            self.df.to_parquet(save_path)   # Salva o DataFrame em formato Parquet
-            print(f"Arquivo salvo em {save_path}")
+            self.logger.info(f"Tentando carregar arquivo JSON: {file}")
+            
+            # Verificar se o arquivo existe
+            if not os.path.exists(file):
+                raise FileNotFoundError(f"O arquivo {file} não foi encontrado.")
+            
+            # Verificar se o arquivo está vazio
+            if os.path.getsize(file) == 0:
+                raise ValueError(f"O arquivo {file} está vazio.")
+            
+            # Tentar ler o arquivo
+            self.df = duckdb.read_json(file)
+            self.logger.info(f"Arquivo JSON carregado com sucesso: {file}")
             return self.df
+            
         except Exception as e:
-            print(f"Erro ao carregar o arquivo JSON: {e}")
+            self.logger.error(f"Erro ao carregar o arquivo JSON {file}: {str(e)}")
             raise
