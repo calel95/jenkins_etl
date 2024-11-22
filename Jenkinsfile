@@ -49,10 +49,10 @@ pipeline {
                 script {
                     echo "Carregando arquivo: ${UPLOAD_FILE}"
                     sh """
-                    python -c '
+                    python -c "
 from extract import Extract
 extractor = Extract()
-df = extractor.web_one_input_${params.FILE_TYPE}('${WORKSPACE}/${UPLOAD_FILE}')'
+df = extractor.web_one_input_${params.FILE_TYPE}('${WORKSPACE}/${UPLOAD_FILE}')"
                     """
                 }
             }
