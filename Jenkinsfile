@@ -25,6 +25,7 @@ pipeline {
             defaultValue: '',
             description: 'Parâmetros adicionais para transformações (JSON format ex: {"null_columns": ["col1", "col2"]})'
         )
+        base64File 'file_teste'
     }
     stages {
         stage('Exibir parâmetros') {
@@ -53,11 +54,13 @@ pipeline {
                 }
             }
         }
-        stage('Mover Arquivo') {
+        stage('teste stage') {
             steps {
                 script {
                     // Mover ou copiar o arquivo para a pasta workspace
-                    sh "mv ${WORKSPACE}/${UPLOAD_FILE} ${WORKSPACE}/uploaded_file.${FILE_TYPE}"
+                    withFileParameter('small') {
+                    sh 'cat $small'
+                    }
                 }
             }
         }
