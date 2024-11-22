@@ -61,7 +61,7 @@ pipeline {
                     python -c "
 from extract import Extract
 extractor = Extract()
-file_path = '${UPLOAD_FILE}'
+file_path = '${WORKSPACE}/${UPLOAD_FILE}'
 print(f'Carregando o arquivo: {file_path}')
 df = extractor.web_one_input_${params.FILE_TYPE}(file_path)
 print('Arquivo processado com sucesso.')
