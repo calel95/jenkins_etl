@@ -34,6 +34,12 @@ pipeline {
     }
 
     stages {
+        stage('Preparar Ambiente') {
+            steps {
+                    // Instala dependências
+                    sh 'pip install -r requirements.txt'
+            }
+        }
         stage('Exibir parâmetros') {
             steps {
                 script {
@@ -41,12 +47,6 @@ pipeline {
                     echo "Removido dados nulos: ${params.remove_nulls}"
                 }
             }
-        }
-        stage('Carregando arquivo') {
-            steps {
-                // Clona o repositório Git
-                sh " echo ${FILE}"
-                }           
         }
         stage('Extract') {
             steps {
@@ -57,7 +57,7 @@ pipeline {
 from extract import Extract
 extractor = Extract()
 df = extractor.web_one_input_${params.FILE_TYPE}('data/${params.FILE_TYPE}/${params.FILE_NAME}.${params.FILE_TYPE}')
-df.to_parquet('data/tmp/etl_stage.parquet')"
+"
                     """
                 }
             }
