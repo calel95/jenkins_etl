@@ -37,16 +37,23 @@ class Extract:
 
 
     def web_one_input_csv(self, file):
-        '''Carrega dados de um arquivo CSV em memória'''
-        # self.df = pd.read_csv(file)  # Usa pandas para ler diretamente do objeto de arquivo
-        # size = file.size  # Obtem o tamanho do arquivo
-        # print(f"Size do arquivo: {size} bytes")
-        # return self.df
-        self.df = duckdb.read_csv(file)
-        return self.df
-
+        """Carrega dados de um arquivo CSV em memória e salva em disco."""
+        try:
+            self.df = duckdb.read_csv(file)  # Carrega o CSV
+            self.df.to_parquet('data/tmp/etl_stage.parquet')   # Salva o DataFrame em formato Parquet
+            print(f"Arquivo salvo em {'data/tmp/etl_stage.parquet'}")
+            return self.df
+        except Exception as e:
+            print(f"Erro ao carregar o arquivo CSV: {e}")
+            raise
 
     def web_one_input_json(self, file):
-        '''Carrega dados de um arquivo JSON em memória'''
-        self.df = duckdb.read_csv(file)  # Usa pandas para ler diretamente do objeto de arquivo
-        return self.df
+        """Carrega dados de um arquivo JSON em memória e salva em disco."""
+        try:
+            self.df = duckdb.read_csv(file)  # Substitua por read_json se suportar JSON diretamente
+            self.df.to_parquet('data/tmp/etl_stage.parquet')   # Salva o DataFrame em formato Parquet
+            print(f"Arquivo salvo em {'data/tmp/etl_stage.parquet'}")
+            return self.df
+        except Exception as e:
+            print(f"Erro ao carregar o arquivo JSON: {e}")
+            raise

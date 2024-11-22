@@ -1,19 +1,14 @@
 pipeline {
     agent any 
-
-    // parameters {
-    //     choice(name: 'TRANSFORMATIONS', choices: ['remove_duplicates', 'remove_nulls', 'last_position'], description: 'Escolha as transformações')
-    //     string(name: 'NULL_COLUMNS', defaultValue: '', description: 'Colunas para remover nulos (separadas por vírgula)')
-    //     string(name: 'ORDER_BY', defaultValue: '', description: 'Coluna para ordenar (última posição)')
-    //     string(name: 'PARTITION_BY', defaultValue: '', description: 'Coluna para partição (última posição)')
-    //     file(name: 'FILE', description: 'Caminho do arquivo CSV a ser processado')
-    // }
-
     parameters {
         choice(
             name: 'FILE_TYPE',
             choices: ['csv', 'json'],
             description: 'Escolha o tipo de arquivo para carregar'
+        )
+        file(
+            name: 'UPLOAD_FILE',
+            description: 'Faça o upload do arquivo CSV ou JSON'
         )
         booleanParam(
             name: 'remove_duplicates',
@@ -52,13 +47,12 @@ pipeline {
         stage('Extract') {
             steps {
                 script {
-                    echo "Carregando arquivo: ${FILE}"
+                    echo "Carregando arquivo: ${UPLOAD_FILE}"
                     sh """
                     python -c "
 from extract import Extract
 extractor = Extract()
-df = extractor.web_one_input_${params.FILE_TYPE}('data/${params.FILE_TYPE}/${params.FILE}.${params.FILE_TYPE}')
-"
+df = extractor.web_one_input_${params.FILE_TYPE}('${params.UPLOAD_FILE}')
                     """
                 }
             }
