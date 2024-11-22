@@ -38,6 +38,8 @@ class Extract:
 
     def web_one_input_csv(self, file):
         """Carrega dados de um arquivo CSV em memória e salva em disco."""
+        if not os.path.exists(file):
+            raise FileNotFoundError(f"O arquivo {file} não foi encontrado.")
         try:
             self.df = duckdb.read_csv(file)  # Carrega o CSV
             #self.df.to_parquet(save_path)   # Salva o DataFrame em formato Parquet
