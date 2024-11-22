@@ -52,20 +52,20 @@ pipeline {
                     python -c "
 from extract import Extract
 extractor = Extract()
-df = extractor.web_one_input_${params.FILE_TYPE}('${params.UPLOAD_FILE}')
+df = extractor.web_one_input_${params.FILE_TYPE}('${params.UPLOAD_FILE}')"
                     """
                 }
             }
         }
-        stage('Executar ETL') {
-            steps {
-                script {
-                    // Executar os scripts Python na pasta jenkins
-                    sh "python transform.py --transformations='${TRANSFORMATIONS}' --null_columns='${NULL_COLUMNS}' --order_by='${ORDER_BY}' --partition_by='${PARTITION_BY}'"
-                    sh 'python load.py'
-                }
-            }
-        }
+        // stage('Executar ETL') {
+        //     steps {
+        //         script {
+        //             // Executar os scripts Python na pasta jenkins
+        //             sh "python transform.py --transformations='${TRANSFORMATIONS}' --null_columns='${NULL_COLUMNS}' --order_by='${ORDER_BY}' --partition_by='${PARTITION_BY}'"
+        //             sh 'python load.py'
+        //         }
+        //     }
+        // }
     }
     post {
         success {
