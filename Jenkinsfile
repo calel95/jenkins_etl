@@ -51,6 +51,7 @@ pipeline {
             steps {
                 script {
                 sh 'ls -lh ${WORKSPACE}'
+                sh 'cat $UPLOAD_FILE'
                 }
             }
         }
