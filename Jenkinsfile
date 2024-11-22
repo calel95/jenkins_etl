@@ -44,7 +44,7 @@ pipeline {
                     }
             }
         }
-        stage('Check Workspace') {
+        stage('Check before Workspace') {
             steps {
                 script {
                 sh 'ls -lh ${WORKSPACE}'
@@ -56,6 +56,7 @@ pipeline {
                 script {
                     echo "Nome do arquivo carregado: ${UPLOAD_FILE}"
                     echo "Caminho completo: ${WORKSPACE}/${UPLOAD_FILE}"
+                    sh 'ls -lh ${WORKSPACE}'
                     sh """
                     python -c "
 from extract import Extract
