@@ -44,6 +44,13 @@ pipeline {
                     }
             }
         }
+        stage('Check Workspace') {
+            steps {
+                script {
+                sh 'ls -lh ${WORKSPACE}'
+                }
+            }
+        }
         stage('Extract') {
             steps {
                 script {
@@ -52,7 +59,9 @@ pipeline {
                     python -c "
 from extract import Extract
 extractor = Extract()
-df = extractor.web_one_input_${params.FILE_TYPE}('${WORKSPACE}/${UPLOAD_FILE}')"
+df = extractor.web_one_input_${params.FILE_TYPE}('${WORKSPACE}/${UPLOAD_FILE}')
+print('Arquivo processado com sucesso.')
+"
                     """
                 }
             }
