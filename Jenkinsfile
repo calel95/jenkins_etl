@@ -20,7 +20,6 @@ pipeline {
             defaultValue: false,
             description: 'Remove dados nulos'
         )
-
         string(
             name: 'TRANSFORM_PARAMS',
             defaultValue: '',
@@ -35,6 +34,7 @@ pipeline {
                     echo "Removido dados nulos: ${params.remove_nulls}"
                     echo "Nome do arquivo carregado: ${UPLOAD_FILE}"
                     echo "Caminho completo do arquivo: ${WORKSPACE}/${UPLOAD_FILE}"
+                    sh 'mv '
                 }
             }
         }
@@ -50,6 +50,14 @@ pipeline {
             steps {
                 script {
                 sh 'ls -lh ${WORKSPACE}'
+                }
+            }
+        }
+        stage('Mover Arquivo') {
+            steps {
+                script {
+                    // Mover ou copiar o arquivo para a pasta workspace
+                    sh "mv ${WORKSPACE}/${UPLOAD_FILE} ${WORKSPACE}/uploaded_file.${FILE_TYPE}"
                 }
             }
         }
