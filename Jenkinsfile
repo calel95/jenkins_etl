@@ -35,7 +35,6 @@ pipeline {
                     echo "Removido dados nulos: ${params.remove_nulls}"
                     echo "Nome do arquivo carregado: ${UPLOAD_FILE}"
                     echo "Caminho completo do arquivo: ${WORKSPACE}/${UPLOAD_FILE}"
-                    sh 'mv '
                 }
             }
         }
