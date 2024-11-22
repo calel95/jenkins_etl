@@ -52,7 +52,7 @@ pipeline {
                     python -c "
 from extract import Extract
 extractor = Extract()
-df = extractor.web_one_input_${params.FILE_TYPE}('${params.UPLOAD_FILE}')"
+df = extractor.web_one_input_${params.FILE_TYPE}('${UPLOAD_FILE}')"
                     """
                 }
             }
