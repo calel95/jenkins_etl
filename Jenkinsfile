@@ -58,8 +58,8 @@ pipeline {
             steps {
                 script {
                     // Mover ou copiar o arquivo para a pasta workspace
-                    withFileParameter('small') {
-                    sh 'cat $small'
+                    withFileParameter('file_teste') {
+                    sh 'cat $file_teste'
                     }
                 }
             }
