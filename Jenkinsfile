@@ -33,6 +33,8 @@ pipeline {
                 script {
                     echo "Removido dados duplicados: ${params.remove_duplicates}"
                     echo "Removido dados nulos: ${params.remove_nulls}"
+                    echo "Nome do arquivo carregado: ${UPLOAD_FILE}"
+                    echo "Caminho completo do arquivo: ${WORKSPACE}/${UPLOAD_FILE}"
                 }
             }
         }
