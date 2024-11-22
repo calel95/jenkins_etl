@@ -54,11 +54,14 @@ pipeline {
         stage('Extract') {
             steps {
                 script {
-                    echo "Carregando arquivo: ${UPLOAD_FILE}"
+                    echo "Nome do arquivo carregado: ${params.UPLOAD_FILE}"
+                    echo "Caminho completo: ${WORKSPACE}/${params.UPLOAD_FILE}"
                     sh """
                     python -c "
 from extract import Extract
 extractor = Extract()
+file_path = '${WORKSPACE}/${params.UPLOAD_FILE}'
+print(f'Carregando o arquivo: {file_path}')
 df = extractor.web_one_input_${params.FILE_TYPE}('${WORKSPACE}/${UPLOAD_FILE}')
 print('Arquivo processado com sucesso.')
 "
