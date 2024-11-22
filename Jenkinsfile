@@ -1,6 +1,5 @@
 pipeline {
-    agent any
-
+    agent any 
     parameters {
         choice(
             name: 'FILE_TYPE',
@@ -21,13 +20,13 @@ pipeline {
             defaultValue: false,
             description: 'Remove dados nulos'
         )
+
         string(
             name: 'TRANSFORM_PARAMS',
             defaultValue: '',
             description: 'Parâmetros adicionais para transformações (JSON format ex: {"null_columns": ["col1", "col2"]})'
         )
     }
-
     stages {
         stage('Exibir parâmetros') {
             steps {
@@ -35,61 +34,55 @@ pipeline {
                     echo "Removido dados duplicados: ${params.remove_duplicates}"
                     echo "Removido dados nulos: ${params.remove_nulls}"
                     echo "Nome do arquivo carregado: ${UPLOAD_FILE}"
-                    echo "Caminho completo do arquivo: <span class="math-inline">\{WORKSPACE\}/</span>{UPLOAD_FILE}"
+                    echo "Caminho completo do arquivo: ${WORKSPACE}/${UPLOAD_FILE}"
+                    echo "Caminho completo do arquivo: ${WORKSPACE}/${file2}"
                 }
             }
         }
         stage('Preparar Ambiente') {
             steps {
-                script {
+                    // Instala dependências
+                    script {
                     sh 'pip install -r requirements.txt'
-                }
+                    }
             }
         }
         stage('Check before Workspace') {
             steps {
                 script {
-                    sh 'ls -lh <span class="math-inline">\{WORKSPACE\}'
-\}
-\}
-\}
-stage\('Extract'\) \{
-steps \{
-script \{
-def filePath = "${WORKSPACE}/${UPLOAD_FILE}"
-
+                sh 'ls -lh ${WORKSPACE}'
+                }
+            }
+        }
+        stage('Extract') {
+            steps {
+                script {
                     echo "Nome do arquivo carregado: ${UPLOAD_FILE}"
-                    echo "Caminho completo: ${filePath}"
+                    echo "Caminho completo: ${WORKSPACE}/${UPLOAD_FILE}"
                     sh 'ls -lh ${WORKSPACE}'
-
                     sh """
                     python -c "
-                    from extract import Extract
-                    extractor = Extract()
-
-                    if not os.path.exists('${filePath}'):
-                        print('Erro: Arquivo não encontrado!')
-                        exit(1)  # Exit with non-zero code to indicate failure
-
-                    try:
-                        if params.FILE_TYPE == 'csv':
-                            df = extractor.web_one_input_csv('${filePath}')
-                        else:
-                            df = extractor.web_one_input_json('${filePath}')  # Update if needed
-                        print('Arquivo processado com sucesso.')
-                    except Exception as e:
-                        print(f'Erro ao processar o arquivo: {e}')
-                        exit(1)
-                    "
+from extract import Extract
+extractor = Extract()
+file_path = '${WORKSPACE}/${UPLOAD_FILE}'
+print(f'Carregando o arquivo: {file_path}')
+df = extractor.web_one_input_${params.FILE_TYPE}(file_path)
+print('Arquivo processado com sucesso.')
+"
                     """
                 }
             }
         }
         // stage('Executar ETL') {
-        //     // ...
+        //     steps {
+        //         script {
+        //             // Executar os scripts Python na pasta jenkins
+        //             sh "python transform.py --transformations='${TRANSFORMATIONS}' --null_columns='${NULL_COLUMNS}' --order_by='${ORDER_BY}' --partition_by='${PARTITION_BY}'"
+        //             sh 'python load.py'
+        //         }
+        //     }
         // }
     }
-
     post {
         success {
             echo 'ETL executado com sucesso!'
