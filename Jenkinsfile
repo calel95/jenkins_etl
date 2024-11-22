@@ -47,12 +47,12 @@ pipeline {
         stage('Extract') {
             steps {
                 script {
-                    echo "Carregando arquivo: ${params.UPLOAD_FILE}"
+                    echo "Carregando arquivo: ${UPLOAD_FILE}"
                     sh """
                     python -c '
 from extract import Extract
 extractor = Extract()
-df = extractor.web_one_input_${params.FILE_TYPE}('${WORKSPACE}/${params.UPLOAD_FILE}')'
+df = extractor.web_one_input_${params.FILE_TYPE}('${WORKSPACE}/${UPLOAD_FILE}')'
                     """
                 }
             }
