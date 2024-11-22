@@ -32,64 +32,32 @@ pipeline {
                 script {
                     echo "Removido dados duplicados: ${params.remove_duplicates}"
                     echo "Removido dados nulos: ${params.remove_nulls}"
-                    echo "Nome do arquivo carregado: ${UPLOAD_FILE}"
-                    echo "Caminho completo do arquivo: ${WORKSPACE}/${UPLOAD_FILE}"
-                }
-            }
-        }
-        stage('teste stage') {
-            steps {
-                script {
-                    // Mover ou copiar o arquivo para a pasta workspace
-                    withFileParameter('UPLOAD_FILE') {
-                    sh 'cat $UPLOAD_FILE'
-                    }
-                }
-            }
-        }
-        stage('Preparar Ambiente') {
-            steps {
-                    // Instala dependências
-                    script {
-                    sh 'pip install -r requirements.txt'
-                    }
-            }
-        }
-        stage('Check before Workspace') {
-            steps {
-                script {
-                sh 'ls -lh ${WORKSPACE}'
                 }
             }
         }
         stage('Extract') {
             steps {
                 script {
-                    echo "Nome do arquivo carregado: ${UPLOAD_FILE}"
-                    echo "Caminho completo: ${WORKSPACE}/${UPLOAD_FILE}"
-                    sh 'ls -lh ${WORKSPACE}'
-                    sh """
-                    python -c "
+                    // Usar withFileParameter para acessar o arquivo temporário
+                    withFileParameter('UPLOAD_FILE') {
+                        def tempFile = env.UPLOAD_FILE // Caminho do arquivo temporário
+                        echo "Caminho do arquivo temporário: ${tempFile}"
+                        
+                        // Executar o Python script com o caminho correto do arquivo
+                        sh """
+                        python -c "
 from extract import Extract
 extractor = Extract()
-file_path = '${WORKSPACE}/${UPLOAD_FILE}'
+file_path = '${tempFile}'
 print(f'Carregando o arquivo: {file_path}')
 df = extractor.web_one_input_${params.FILE_TYPE}(file_path)
 print('Arquivo processado com sucesso.')
 "
-                    """
+                        """
+                    }
                 }
             }
         }
-        // stage('Executar ETL') {
-        //     steps {
-        //         script {
-        //             // Executar os scripts Python na pasta jenkins
-        //             sh "python transform.py --transformations='${TRANSFORMATIONS}' --null_columns='${NULL_COLUMNS}' --order_by='${ORDER_BY}' --partition_by='${PARTITION_BY}'"
-        //             sh 'python load.py'
-        //         }
-        //     }
-        // }
     }
     post {
         success {
