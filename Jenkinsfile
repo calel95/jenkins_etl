@@ -56,24 +56,26 @@ pipeline {
 stage\('Extract'\) \{
 steps \{
 script \{
-def file\_path \= "</span>{WORKSPACE}/${UPLOAD_FILE}"  // Assuming file goes into workspace root
+def filePath = "${WORKSPACE}/${UPLOAD_FILE}"
 
                     echo "Nome do arquivo carregado: ${UPLOAD_FILE}"
-                    echo "Caminho completo: ${file_path}"
-                    sh 'ls -lh <span class="math-inline">\{WORKSPACE\}'
-sh """
-python \-c "
-from extract import Extract
-extractor \= Extract\(\)
-if not os\.path\.exists\('</span>{file_path}'):
+                    echo "Caminho completo: ${filePath}"
+                    sh 'ls -lh ${WORKSPACE}'
+
+                    sh """
+                    python -c "
+                    from extract import Extract
+                    extractor = Extract()
+
+                    if not os.path.exists('${filePath}'):
                         print('Erro: Arquivo não encontrado!')
                         exit(1)  # Exit with non-zero code to indicate failure
 
                     try:
                         if params.FILE_TYPE == 'csv':
-                            df = extractor.web_one_input_csv('<span class="math-inline">\{file\_path\}'\)
-else\:
-df \= extractor\.web\_one\_input\_json\('</span>{file_path}')  # Update if needed
+                            df = extractor.web_one_input_csv('${filePath}')
+                        else:
+                            df = extractor.web_one_input_json('${filePath}')  # Update if needed
                         print('Arquivo processado com sucesso.')
                     except Exception as e:
                         print(f'Erro ao processar o arquivo: {e}')
@@ -93,3 +95,7 @@ df \= extractor\.web\_one\_input\_json\('</span>{file_path}')  # Update if neede
             echo 'ETL executado com sucesso!'
         }
         failure {
+            echo 'Falha na execução do ETL.'
+        }
+    }
+}
