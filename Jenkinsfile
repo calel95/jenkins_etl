@@ -10,20 +10,15 @@ pipeline {
     // }
 
     parameters {
-        choice(
-            name: 'PARAMETRO1',
-            choices: ['Nenhum', 'Opção1', 'Opção2', 'Opção3'],
-            description: 'Escolha uma opção para o Parâmetro 1'
+        booleanParam(
+            name: 'remove_duplicates',
+            defaultValue: false,
+            description: 'Remove dados duplicados'
         )
-        choice(
-            name: 'PARAMETRO2',
-            choices: ['Nenhum', 'Opção1', 'Opção2', 'Opção3'],
-            description: 'Escolha uma opção para o Parâmetro 2'
-        )
-        choice(
-            name: 'PARAMETRO3',
-            choices: ['Nenhum', 'Opção1', 'Opção2', 'Opção3'],
-            description: 'Escolha uma opção para o Parâmetro 3'
+        booleanParam(
+            name: 'remove_nulls',
+            defaultValue: false,
+            description: 'Remove dados nulos'
         )
     }
 
@@ -31,9 +26,8 @@ pipeline {
         stage('Exibir parâmetros') {
             steps {
                 script {
-                    echo "Parâmetro 1: ${params.PARAMETRO1}"
-                    echo "Parâmetro 2: ${params.PARAMETRO2}"
-                    echo "Parâmetro 3: ${params.PARAMETRO3}"
+                    echo "Removido dados duplicados: ${params.remove_duplicates}"
+                    echo "Removido dados nulos: ${params.remove_nulls}"
                 }
             }
         }
