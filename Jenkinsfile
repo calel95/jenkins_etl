@@ -51,7 +51,7 @@ pipeline {
             steps {
                 script {
                 sh 'ls -lh ${WORKSPACE}'
-                sh 'cat $UPLOAD_FILE'
+                sh "mv ${WORKSPACE}/${UPLOAD_FILE} ${WORKSPACE}/uploaded_file.${params.FILE_TYPE}"
                 }
             }
         }
