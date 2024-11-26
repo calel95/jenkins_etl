@@ -50,7 +50,10 @@ file_path = '${tempFile}'
 df = extractor.web_one_input_${params.FILE_TYPE}(file_path)
 
 transform = Transform(df)
-transform.remove_data_duplicates()
+remove_duplicates = ${params.REMOVE_DUPLICATES}
+if remove_duplicates:
+    transform.remove_data_duplicates()
+
 transform.select_table()
 "
                         """
