@@ -30,12 +30,12 @@ pipeline {
         stage('Exibir parâmetros') {
             steps {
                 script {
-                    echo "Removido dados duplicados: ${params.remove_duplicates}"
-                    echo "Removido dados nulos: ${params.remove_nulls}"
+                    echo "Remover dados duplicados: ${params.remove_duplicates}"
+                    echo "Remover dados nulos: ${params.remove_nulls}"
                 }
             }
         }
-        stage('Extract') {
+        stage('ETL Process') {
             steps {
                 script {
                     // Usar withFileParameter para acessar o arquivo temporário
@@ -47,32 +47,17 @@ pipeline {
                         sh """
                         python -c "
 from extract import Extract
+from transform import Transform
 extractor = Extract()
 file_path = '${tempFile}'
 df = extractor.web_one_input_${params.FILE_TYPE}(file_path)
-"
-                        """
-                    }
-                }
-            }
-        }
-        stage('Transform') {
-            steps {
-                script {
-                    // Usar withFileParameter para acessar o arquivo temporário
-                    
-                        // Executar o Python script com o caminho correto do arquivo
-                        sh """
-                        python -c "
-from extract import Extract
-from transform import Transform
 transform = Transform(df)
 "
                         """
                     }
                 }
             }
-        
+        }
     }
     post {
         success {
