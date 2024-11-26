@@ -51,7 +51,6 @@ df = extractor.web_one_input_${params.FILE_TYPE}(file_path)
 
 transform = Transform(df)
 remove_duplicates = True if '${params.REMOVE_DUPLICATES}' == 'true' else False
-print(remove_duplicates)
 if remove_duplicates:
     transform.remove_data_duplicates()
 
