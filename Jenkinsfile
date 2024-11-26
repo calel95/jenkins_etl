@@ -44,7 +44,7 @@ pipeline {
 from extract import Extract
 from transform import Transform
 
-remove_duplicates = ${params.REMOVE_DUPLICATES}
+remove_duplicates = ${REMOVE_DUPLICATES}
 
 extractor = Extract()
 file_path = '${tempFile}'
