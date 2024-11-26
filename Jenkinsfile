@@ -51,7 +51,7 @@ df = extractor.web_one_input_${params.FILE_TYPE}(file_path)
 
 transform = Transform(df)
 transform.remove_data_duplicates()
-transform.select()
+transform.select_table()
 "
                         """
                     }
