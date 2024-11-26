@@ -44,15 +44,12 @@ pipeline {
 from extract import Extract
 from transform import Transform
 
-remove_duplicates = ${params.REMOVE_DUPLICATES}
-remove_nulls = ${params.REMOVE_NULLS}
-
 extractor = Extract()
 file_path = '${tempFile}'
 df = extractor.web_one_input_${params.FILE_TYPE}(file_path)
 
 transform = Transform(df)
-if ${params.REMOVE_DUPLICATES}:
+if bool(${params.REMOVE_DUPLICATES}):
     df = transform.remove_data_duplicates()
 
 
