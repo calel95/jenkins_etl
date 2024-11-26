@@ -20,6 +20,11 @@ pipeline {
             defaultValue: false,
             description: 'Remove dados nulos'
         )
+        text(
+            name: 'NULL_COLUMNS', 
+            defaultValue: '', 
+            description: 'Digite as colunas para remover registros nulos (separadas por vírgula)'
+        )
     }
     stages {
         stage('Exibir parâmetros') {
@@ -53,6 +58,11 @@ transform = Transform(df)
 remove_duplicates = True if '${params.REMOVE_DUPLICATES}' == 'true' else False
 if remove_duplicates:
     transform.remove_data_duplicates()
+
+remove_nulls = True if '${params.REMOVE_NULLS}' == 'true' else False
+null_columns = [${params.NULL_COLUMNS}]
+if remove_nulls:
+    transform.remove_data_nulls(null_columns)
 
 transform.select_table()
 "
