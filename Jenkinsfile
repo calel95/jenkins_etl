@@ -40,9 +40,11 @@ pipeline {
                         
                         // Executar o Python script com o caminho correto do arquivo
                         sh """
-                        python -c "
+                        python3 -c "
 from extract import Extract
 from transform import Transform
+
+remove_duplicates = ${params.REMOVE_DUPLICATES}
 
 extractor = Extract()
 file_path = '${tempFile}'
