@@ -1,8 +1,6 @@
 pipeline {
     agent any 
     parameters {
-        buildSelector(name: 'BUILD_SELECTOR_TESTE',
-            description: 'teste')
         choice(
             name: 'FILE_TYPE',
             choices: ['csv', 'json'],
@@ -52,6 +50,23 @@ from extract import Extract
 extractor = Extract()
 file_path = '${tempFile}'
 df = extractor.web_one_input_${params.FILE_TYPE}(file_path)
+"
+                        """
+                    }
+                }
+            }
+        }
+        stage('Transform') {
+            steps {
+                script {
+                    // Usar withFileParameter para acessar o arquivo temporário
+                    
+                        // Executar o Python script com o caminho correto do arquivo
+                        sh """
+                        python -c "
+from extract import Extract
+from transform import Transform
+transform = Transform(df)
 "
                         """
                     }
