@@ -31,9 +31,13 @@ class Transform:
     def remove_data_duplicates(self):
         """Remove todos os registros duplicados."""
         duckdb.register('VW', self.df)
+        count = duckdb.query("select count(*) from VW").df()
         query = "select distinct * from VW"
         result = duckdb.query(query).df()
         self.df = duckdb.df(result)
+        duckdb.register('VW', self.df)
+        count_after = duckdb.query("select count(*) from VW").df()
+        print(f"linhas removidas {count - count_after}")
         return self.df
     
     def remove_data_nulls(self,columns: list):
