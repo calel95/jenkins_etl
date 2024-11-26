@@ -60,7 +60,7 @@ if remove_duplicates:
     transform.remove_data_duplicates()
 
 remove_nulls = True if '${params.REMOVE_NULLS}' == 'true' else False
-null_columns = ${params.NULL_COLUMNS}.split(',')
+null_columns = '${params.NULL_COLUMNS}'.split(',')
 if remove_nulls:
     transform.remove_data_nulls(null_columns)
 
