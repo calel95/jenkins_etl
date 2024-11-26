@@ -72,7 +72,7 @@ transform = Transform(df)
                     }
                 }
             }
-        }
+        
     }
     post {
         success {
