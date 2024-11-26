@@ -49,9 +49,7 @@ pipeline {
 from extract import Extract
 extractor = Extract()
 file_path = '${tempFile}'
-print(f'Carregando o arquivo: {file_path}')
 df = extractor.web_one_input_${params.FILE_TYPE}(file_path)
-print('Arquivo processado com sucesso.')
 "
                         """
                     }

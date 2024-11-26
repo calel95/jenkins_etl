@@ -26,6 +26,7 @@ class Extract:
             # Tentar ler o arquivo
             self.df = duckdb.read_csv(file)
             self.logger.info(f"Arquivo CSV carregado com sucesso: {file}")
+            print(self.df)
             return self.df
             
         except Exception as e:
