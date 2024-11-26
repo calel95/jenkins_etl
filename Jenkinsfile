@@ -11,19 +11,14 @@ pipeline {
             description: 'Faça o upload do arquivo CSV ou JSON'
         )
         booleanParam(
-            name: 'remove_duplicates',
+            name: 'REMOVE_DUPLICATES',
             defaultValue: false,
             description: 'Remove dados duplicados'
         )
         booleanParam(
-            name: 'remove_nulls',
+            name: 'REMOVE_NULLS',
             defaultValue: false,
             description: 'Remove dados nulos'
-        )
-        string(
-            name: 'TRANSFORM_PARAMS',
-            defaultValue: '',
-            description: 'Parâmetros adicionais para transformações (JSON format ex: {"null_columns": ["col1", "col2"]})'
         )
     }
     stages {
@@ -48,10 +43,19 @@ pipeline {
                         python -c "
 from extract import Extract
 from transform import Transform
+
+remove_duplicates = ${params.REMOVE_DUPLICATES}
+remove_nulls = ${params.REMOVE_NULLS}
+
 extractor = Extract()
 file_path = '${tempFile}'
 df = extractor.web_one_input_${params.FILE_TYPE}(file_path)
+
 transform = Transform(df)
+if remove_duplicates:
+        df = transform.remove_data_duplicates()
+        
+
 "
                         """
                     }

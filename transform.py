@@ -28,7 +28,7 @@ class Transform:
             print(duckdb.df(result))
             return self.df
         
-    def remove_data_duplicates(self,):
+    def remove_data_duplicates(self):
         """Remove todos os registros duplicados."""
         duckdb.register('VW', self.df)
         query = "select distinct * from VW"
