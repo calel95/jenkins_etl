@@ -25,7 +25,7 @@ pipeline {
         stage('Exibir parâmetros') {
             steps {
                 script {
-                    echo "Remover dados duplicados: ${params.REMOVE_DUPLICATES}"
+                    echo "Remover dados duplicados: capitalize(${params.REMOVE_DUPLICATES})"
                     echo "Remover dados nulos: ${params.REMOVE_NULLS}"
                 }
             }
