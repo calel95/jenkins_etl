@@ -1,9 +1,8 @@
 pipeline {
     agent any 
     parameters {
-        choiceListProvider(name: 'teste',
-            choices: ['csv', 'json'],
-            description: 'Escolha o tipo de arquivo para carregar')
+        buildSelector(name: 'BUILD_SELECTOR_TESTE',
+            description: 'teste')
         choice(
             name: 'FILE_TYPE',
             choices: ['csv', 'json'],
