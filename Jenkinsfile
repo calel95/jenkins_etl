@@ -25,7 +25,7 @@ pipeline {
         stage('Exibir parâmetros') {
             steps {
                 script {
-                    echo "Remover dados duplicados: capitalize(${params.REMOVE_DUPLICATES})"
+                    echo "Remover dados duplicados: ${params.REMOVE_DUPLICATES}"
                     echo "Remover dados nulos: ${params.REMOVE_NULLS}"
                 }
             }
@@ -50,6 +50,8 @@ file_path = '${tempFile}'
 df = extractor.web_one_input_${params.FILE_TYPE}(file_path)
 
 transform = Transform(df)
+if ${params.REMOVE_DUPLICATES} != True:
+    print("duplicate false")
 transform.remove_data_duplicates()
 transform.select_table()
 "
